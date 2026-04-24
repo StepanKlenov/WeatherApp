@@ -1,20 +1,44 @@
 package com.example.weatherapp
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.Spinner
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var citySpinner: Spinner
+    private lateinit var loadButton: Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+
+        citySpinner = findViewById(R.id.citySpinner)
+        loadButton = findViewById(R.id.loadWeatherButton)
+
+        val cities = listOf(
+            "Moscow",
+            "Saint Petersburg",
+            "Kazan",
+            "Sochi",
+            "Novosibirsk"
+        )
+
+        val adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_item,
+            cities
+        )
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        citySpinner.adapter = adapter
+
+        loadButton.setOnClickListener {
+            val selectedCity = citySpinner.selectedItem.toString()
+            Toast.makeText(this, "Выбран город: $selectedCity", Toast.LENGTH_SHORT).show()
         }
     }
 }
